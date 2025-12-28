@@ -13,6 +13,15 @@ interface MotorControlsProps {
   onResetAttitude: () => void;
 }
 
+interface JogButtonProps {
+  onStep: () => void; 
+  onContinuousStart: () => void; 
+  onContinuousStop: () => void; 
+  disabled: boolean; 
+  className: string;
+  children?: React.ReactNode;
+}
+
 // Helper button that differentiates between a quick click (Step) and a hold (Continuous)
 const JogButton = ({ 
   onStep, 
@@ -21,14 +30,7 @@ const JogButton = ({
   disabled, 
   className,
   children 
-}: { 
-  onStep: () => void; 
-  onContinuousStart: () => void; 
-  onContinuousStop: () => void; 
-  disabled: boolean; 
-  className: string;
-  children: React.ReactNode 
-}) => {
+}: JogButtonProps) => {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isContinuous = useRef(false);
 

@@ -20,6 +20,9 @@ export default function App() {
   
   // Historical data for chart
   const [telemetryHistory, setTelemetryHistory] = useState<TelemetryPoint[]>([]);
+  
+  // MCU Uptime Counter (in seconds)
+  const [uptime, setUptime] = useState<number>(0);
 
   // Simulation State for "Movement"
   const [targetHeight, setTargetHeight] = useState<number | null>(null);
@@ -107,6 +110,22 @@ export default function App() {
         if (direction === 'LEFT') setTargetRoll(MIN_ROLL_DEG);
         if (direction === 'RIGHT') setTargetRoll(MAX_ROLL_DEG);
     }
+  };
+
+  // --- Uptime Counter Loop ---
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setUptime(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Helper to format seconds to HH:MM:SS
+  const formatUptime = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   // --- Simulation Loop (Simulating STM32 Serial Stream) ---
@@ -282,7 +301,7 @@ export default function App() {
                 <div className="space-y-3">
                    <div className="flex justify-between items-center p-2 bg-slate-900/50 rounded border border-slate-700">
                       <span className="text-sm text-slate-400">MCU 运行时间</span>
-                      <span className="font-mono text-green-400">00:42:15</span>
+                      <span className="font-mono text-green-400">{formatUptime(uptime)}</span>
                    </div>
                    <div className="flex justify-between items-center p-2 bg-slate-900/50 rounded border border-slate-700">
                       <span className="text-sm text-slate-400">CAN 总线负载</span>
