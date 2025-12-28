@@ -1,0 +1,5 @@
+{
+  "name": "FlexRig Control",
+  "description": "Industrial control interface for STM32-based flexible tooling platform, featuring real-time height/pitch visualization and CAN-bus motor control.",
+  "requestFramePermissions": []
+}
